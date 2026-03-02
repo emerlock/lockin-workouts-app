@@ -99,7 +99,9 @@ export default function WorkoutCreate() {
 
   return (
     <section className="card-modern max-w-2xl">
-      <h1 className="mb-1 text-3xl font-bold text-brand-primary dark:text-purple-300">Create Workout</h1>
+      <h1 className="mb-1 text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">
+        Create Workout
+      </h1>
       <p className="mb-6 text-sm text-purple-700 dark:text-purple-200">
         Build a new workout template in seconds.
       </p>
@@ -202,7 +204,7 @@ export default function WorkoutCreate() {
               type="button"
               onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
               disabled={currentPage === 1}
-              className="rounded-md border border-purple-300 px-3 py-1.5 text-xs font-semibold text-purple-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-purple-700 dark:text-purple-200"
+              className="rounded-md border border-purple-300 px-2.5 py-1.5 text-xs font-semibold text-purple-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-purple-700 dark:text-purple-200 sm:px-3"
             >
               Previous
             </button>
@@ -213,7 +215,7 @@ export default function WorkoutCreate() {
               type="button"
               onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="rounded-md border border-purple-300 px-3 py-1.5 text-xs font-semibold text-purple-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-purple-700 dark:text-purple-200"
+              className="rounded-md border border-purple-300 px-2.5 py-1.5 text-xs font-semibold text-purple-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-purple-700 dark:text-purple-200 sm:px-3"
             >
               Next
             </button>

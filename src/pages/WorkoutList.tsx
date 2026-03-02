@@ -6,27 +6,28 @@ export default function WorkoutList() {
 
   return (
     <section className="space-y-5">
-      <div className="card-modern flex items-center justify-between">
+      <div className="card-modern flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-brand-primary dark:text-purple-300">Workouts</h1>
           <p className="mt-1 text-sm text-purple-700 dark:text-purple-200">
             Track and review your saved sessions.
           </p>
         </div>
-        <Link to="/workouts/new" className="btn-secondary">
+        <Link to="/workouts/new" className="btn-secondary w-full text-center sm:w-auto">
           New Workout
         </Link>
       </div>
 
       <div className="grid gap-4">
         {workouts.map((workout) => (
-          <Link
+          <article
             key={workout.id}
-            to={`/workouts/${workout.id}`}
-            className="card-modern block border-l-4 border-l-brand-primary transition hover:-translate-y-0.5"
+            className="card-modern border-l-4 border-l-brand-primary transition hover:-translate-y-0.5"
           >
             <h2 className="text-xl font-semibold text-brand-primaryDark dark:text-purple-200">
-              {workout.name}
+              <Link to={`/workouts/${workout.id}`} className="underline-offset-2 hover:underline">
+                {workout.name}
+              </Link>
             </h2>
             <p className="mt-1 text-sm text-purple-700 dark:text-purple-300">{workout.description}</p>
             <p className="mt-2 text-sm text-purple-700 dark:text-purple-300">
@@ -34,18 +35,24 @@ export default function WorkoutList() {
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {workout.tags.map((tag) => (
-                <span
+                <Link
                   key={`${workout.id}-${tag}`}
-                  className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                  to={`/exercises?tag=${encodeURIComponent(tag)}`}
+                  className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-800 transition hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-200 dark:hover:bg-purple-800"
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
             <p className="mt-2 text-xs text-purple-600 dark:text-purple-300">
               {workout.exercises.length} exercises
             </p>
-          </Link>
+            <div className="mt-3">
+              <Link to={`/workouts/${workout.id}`} className="btn-primary inline-flex">
+                Open Workout
+              </Link>
+            </div>
+          </article>
         ))}
       </div>
     </section>

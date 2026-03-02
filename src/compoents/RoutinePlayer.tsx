@@ -60,7 +60,10 @@ export default function RoutinePlayer({ intervals, workoutName, startSignal }: R
   }, [intervals]);
 
   const playSwitchChime = () => {
-    const AudioContextCtor = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    const legacyAudioContext = Reflect.get(window, "webkitAudioContext") as
+      | typeof AudioContext
+      | undefined;
+    const AudioContextCtor = window.AudioContext ?? legacyAudioContext;
     if (!AudioContextCtor) {
       return;
     }
@@ -382,7 +385,7 @@ export default function RoutinePlayer({ intervals, workoutName, startSignal }: R
         {formatSeconds(elapsedSeconds)} / {formatSeconds(totalDurationSeconds)}
       </p>
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" onClick={onPlayPause} className="btn-primary">
           {isPlaying ? "Pause" : isComplete ? "Replay" : "Play"}
         </button>
@@ -423,7 +426,10 @@ export default function RoutinePlayer({ intervals, workoutName, startSignal }: R
       </div>
 
       {showFloatingBox ? (
-        <div className="fixed bottom-4 right-4 z-50 w-72 rounded-2xl border border-orange-300 bg-white/95 p-4 shadow-2xl backdrop-blur dark:border-orange-700 dark:bg-slate-900/95">
+        <div
+          className="fixed left-3 right-3 z-50 rounded-2xl border border-orange-300 bg-white/95 p-4 shadow-2xl backdrop-blur sm:left-auto sm:right-4 sm:w-72 dark:border-orange-700 dark:bg-slate-900/95"
+          style={{ bottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+        >
           <button
             type="button"
             onClick={() => setIsPlaying((playing) => !playing)}
