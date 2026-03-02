@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 min-h-screen bg-gradient-to-br from-brand-primarySoft via-brand-tertiary to-brand-secondarySoft text-brand-ink antialiased transition-colors duration-300 dark:from-slate-950 dark:via-purple-950 dark:to-slate-900 dark:text-purple-100;
+  }
+}
+
+@layer components {
+  .card-modern {
+    @apply rounded-2xl border border-purple-100 bg-brand-tertiary p-6 shadow-glow transition-colors duration-300 dark:border-purple-800/70 dark:bg-slate-900 dark:shadow-none;
+  }
+
+  .btn-primary {
+    @apply rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-primaryDark;
+  }
+
+  .btn-secondary {
+    @apply rounded-lg bg-brand-secondary px-4 py-2 text-sm font-semibold text-white transition hover:brightness-95;
+  }
+
+  .input-modern {
+    @apply w-full rounded-lg border border-purple-200 bg-white px-3 py-2 text-brand-ink outline-none ring-brand-primary/30 transition focus:ring dark:border-purple-700 dark:bg-slate-950 dark:text-purple-100;
+  }
+
+  .scroll-modern {
+    scrollbar-width: thin;
+    scrollbar-color: #c084fc transparent;
+  }
+
+  .scroll-modern::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .scroll-modern::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroll-modern::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background: linear-gradient(180deg, #a855f7, #f97316);
+    background-clip: padding-box;
+  }
+}
