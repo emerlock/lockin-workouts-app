@@ -12,11 +12,11 @@ export default function Settings() {
 
   return (
     <section className="card-modern max-w-2xl space-y-5">
-      <h1 className="text-3xl font-bold text-brand-primary dark:text-purple-300">Settings</h1>
+      <h1 className="text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">Settings</h1>
       <p className="text-sm text-purple-700 dark:text-purple-200">Customize your app preferences.</p>
 
       <div className="rounded-xl bg-brand-primarySoft p-4 dark:bg-purple-950">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-brand-primaryDark dark:text-purple-100">Theme</p>
             <p className="text-sm text-purple-700 dark:text-purple-200">Switch between light and dark mode.</p>
@@ -34,14 +34,14 @@ export default function Settings() {
       </div>
 
       <div className="rounded-xl bg-brand-primarySoft p-4 dark:bg-purple-950">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-brand-primaryDark dark:text-purple-100">Voice</p>
             <p className="text-sm text-purple-700 dark:text-purple-200">
               Choose your preferred announcement voice style.
             </p>
           </div>
-          <div className="flex items-center rounded-full border border-purple-300 bg-white p-1 dark:border-purple-700 dark:bg-slate-900">
+          <div className="inline-flex items-center rounded-full border border-purple-300 bg-white p-1 dark:border-purple-700 dark:bg-slate-900">
             <button
               type="button"
               onClick={() => setPreferredVoice("female")}
@@ -69,7 +69,7 @@ export default function Settings() {
       </div>
 
       <div className="rounded-xl bg-brand-primarySoft p-4 dark:bg-purple-950">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-brand-primaryDark dark:text-purple-100">Workout Reminders</p>
             <p className="text-sm text-purple-700 dark:text-purple-200">Enable reminder notifications (demo toggle).</p>

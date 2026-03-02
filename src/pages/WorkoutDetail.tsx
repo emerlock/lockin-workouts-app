@@ -37,7 +37,9 @@ export default function WorkoutDetail() {
   return (
     <section className="card-modern">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-3xl font-bold text-brand-primary dark:text-purple-300">Workout Detail</h1>
+        <h1 className="text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">
+          Workout Detail
+        </h1>
         <button
           type="button"
           onClick={onPlayWorkout}
@@ -50,20 +52,23 @@ export default function WorkoutDetail() {
           </svg>
         </button>
       </div>
-      <div className="mt-5 rounded-xl bg-brand-primarySoft p-5 dark:bg-purple-950">
-        <h2 className="text-2xl font-semibold text-brand-primaryDark dark:text-purple-200">{workout.name}</h2>
+      <div className="-mx-2 mt-5 rounded-xl bg-brand-primarySoft p-4 sm:mx-0 sm:p-5 dark:bg-purple-950">
+        <h2 className="text-xl font-semibold text-brand-primaryDark dark:text-purple-200 sm:text-2xl">
+          {workout.name}
+        </h2>
         <p className="mt-2 text-sm text-purple-700 dark:text-purple-300">{workout.description}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {workout.tags.map((tag) => (
-            <span
+            <Link
               key={`${workout.id}-${tag}`}
+              to={`/exercises?tag=${encodeURIComponent(tag)}`}
               className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-800 dark:bg-purple-900 dark:text-purple-200"
             >
               {tag}
-            </span>
+            </Link>
           ))}
         </div>
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex flex-wrap gap-2 sm:gap-3">
           <span className="rounded-full bg-white px-4 py-1 text-sm font-semibold text-brand-primary dark:bg-slate-800 dark:text-purple-100">
             Sets: {workout.sets}
           </span>

@@ -1,10 +1,10 @@
-import { Disclosure, Switch } from "@headlessui/react";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { NavLink } from "react-router-dom";
-import { useThemeStore } from "../lib/themeStore";
 
 const links = [
   { to: "/", label: "Home", end: true },
   { to: "/workouts", label: "Workouts", end: true },
+  { to: "/exercises", label: "Exercises", end: true },
   { to: "/workouts/new", label: "Create Workout" },
   { to: "/settings", label: "Settings" },
 ];
@@ -16,40 +16,76 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
       : "text-purple-100 hover:bg-white/20 hover:text-white"
   }`;
 
-export default function NavHeader() {
-  const isDark = useThemeStore((state) => state.theme === "dark");
-  const setTheme = useThemeStore((state) => state.setTheme);
+const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `block rounded-lg px-3 py-2 text-sm font-semibold transition ${
+    isActive
+      ? "bg-brand-secondary text-white"
+      : "text-purple-100 hover:bg-white/20 hover:text-white"
+  }`;
 
+export default function NavHeader() {
   return (
     <Disclosure as="header" className="border-b border-purple-400/40 bg-brand-primary">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-        <NavLink to="/" className="text-lg font-bold text-white">
-          LockIn Workouts
-        </NavLink>
+      {({ open, close }) => (
+        <>
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-3 py-4 sm:px-4">
+            <NavLink to="/" className="text-lg font-bold text-white">
+              LockIn Workouts
+            </NavLink>
 
-        <div className="flex items-center gap-3">
-          <nav className="flex items-center gap-2">
-            {links.map((link) => (
-              <NavLink key={link.to} to={link.to} className={linkClass} end={link.end}>
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+            <div className="flex items-center gap-2">
+              <nav className="hidden items-center gap-2 md:flex">
+                {links.map((link) => (
+                  <NavLink key={link.to} to={link.to} className={linkClass} end={link.end}>
+                    {link.label}
+                  </NavLink>
+                ))}
+              </nav>
 
-          <div className="flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold text-white">
-            <span>{isDark ? "Dark" : "Light"}</span>
-            <Switch
-              checked={isDark}
-              onChange={(next) => setTheme(next ? "dark" : "light")}
-              className={`${isDark ? "bg-brand-secondary" : "bg-purple-200"} relative inline-flex h-6 w-11 items-center rounded-full transition`}
-            >
-              <span
-                className={`${isDark ? "translate-x-6" : "translate-x-1"} inline-block h-4 w-4 transform rounded-full bg-white transition`}
-              />
-            </Switch>
+              <DisclosureButton
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 text-white transition hover:bg-white/25 md:hidden"
+                aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+              >
+                {open ? (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+                    <path
+                      d="M4 7h16M4 12h16M4 17h16"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
+              </DisclosureButton>
+            </div>
           </div>
-        </div>
-      </div>
+
+          <DisclosurePanel className="border-t border-white/15 px-3 pb-4 pt-3 sm:px-4 md:hidden">
+            <nav className="grid gap-2">
+              {links.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={mobileLinkClass}
+                  end={link.end}
+                  onClick={() => close()}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+          </DisclosurePanel>
+        </>
+      )}
     </Disclosure>
   );
 }

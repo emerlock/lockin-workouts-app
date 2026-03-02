@@ -3,6 +3,7 @@ import type { Exercise } from "../types/workout";
 type ExerciseInfographicProps = {
   exercise: Exercise;
   compact?: boolean;
+  size?: "default" | "large";
 };
 
 type FigurePose =
@@ -788,8 +789,16 @@ function Figure({
   );
 }
 
-export default function ExerciseInfographic({ exercise, compact = false }: ExerciseInfographicProps) {
+export default function ExerciseInfographic({
+  exercise,
+  compact = false,
+  size = "default",
+}: ExerciseInfographicProps) {
   const visual = EXERCISE_VISUALS[exercise.id] ?? inferVisual(exercise);
+  const infographicSizeClass =
+    size === "large"
+      ? "h-56 sm:h-64 lg:h-80"
+      : "h-28 sm:h-32 lg:h-40";
 
   return (
     <div className="mt-2 rounded-lg border border-purple-200 bg-white p-3 dark:border-purple-700 dark:bg-slate-900">
@@ -798,7 +807,7 @@ export default function ExerciseInfographic({ exercise, compact = false }: Exerc
         viewBox="0 0 360 132"
         role="img"
         aria-label={`${exercise.name} movement infographic`}
-        className="mt-2 h-28 w-full rounded-md bg-gradient-to-r from-purple-100 via-orange-50 to-purple-100 dark:from-purple-900/50 dark:via-slate-800 dark:to-purple-900/50"
+        className={`mt-2 w-full rounded-md bg-gradient-to-r from-purple-100 via-orange-50 to-purple-100 dark:from-purple-900/50 dark:via-slate-800 dark:to-purple-900/50 ${infographicSizeClass}`}
       >
         <rect x="4" y="4" width="112" height="124" rx="8" fill="transparent" stroke="#C4B5FD" strokeDasharray="4 3" />
         <rect x="124" y="4" width="112" height="124" rx="8" fill="transparent" stroke="#FDBA74" strokeDasharray="4 3" />

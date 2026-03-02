@@ -7,7 +7,7 @@ export default function Home() {
         <p className="text-xs font-bold uppercase tracking-wide text-brand-secondary">
           Build Better Routines
         </p>
-        <h1 className="mt-2 text-4xl font-black text-brand-primary dark:text-purple-300">
+        <h1 className="mt-2 text-3xl font-black text-brand-primary dark:text-purple-300 sm:text-4xl">
           Welcome to LockIn Workouts
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-purple-700 dark:text-purple-200">
