@@ -9,6 +9,7 @@ export default function WorkoutList() {
   const WORKOUTS_PER_PAGE = 5;
   const workouts = useWorkoutStore((state) => state.workouts);
   const [query, setQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
   const [focusFilter, setFocusFilter] = useState("all");
   const [postureFilter, setPostureFilter] = useState("all");
@@ -80,99 +81,117 @@ export default function WorkoutList() {
           placeholder="Search workouts..."
           className="input-modern"
         />
-        <div className="mt-3 flex flex-wrap gap-2">
-          <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
-            Types
-          </p>
-          <button
-            type="button"
-            onClick={() => setTypeFilter("all")}
-            className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-              typeFilter === "all"
-                ? "bg-brand-primary text-white"
-                : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-            }`}
-          >
-            All Types
-          </button>
-          {typeTags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => setTypeFilter(tag)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                typeFilter === tag
-                  ? "bg-brand-primary text-white"
-                  : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
-            Focus Areas
-          </p>
-          <button
-            type="button"
-            onClick={() => setFocusFilter("all")}
-            className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-              focusFilter === "all"
-                ? "bg-brand-secondary text-white"
-                : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
-            }`}
-          >
-            All Focus Areas
-          </button>
-          {focusTags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => setFocusFilter(tag)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                focusFilter === tag
-                  ? "bg-brand-secondary text-white"
-                  : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
-            Postures
-          </p>
-          <button
-            type="button"
-            onClick={() => setPostureFilter("all")}
-            className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-              postureFilter === "all"
-                ? "bg-purple-700 text-white"
-                : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-            }`}
-          >
-            All Postures
-          </button>
-          {postureTags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => setPostureFilter(tag)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                postureFilter === tag
-                  ? "bg-purple-700 text-white"
-                  : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        {showFilters ? (
+          <>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
+                Types
+              </p>
+              <button
+                type="button"
+                onClick={() => setTypeFilter("all")}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                  typeFilter === "all"
+                    ? "bg-brand-primary text-white"
+                    : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                }`}
+              >
+                All Types
+              </button>
+              {typeTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setTypeFilter(tag)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    typeFilter === tag
+                      ? "bg-brand-primary text-white"
+                      : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
+                Focus Areas
+              </p>
+              <button
+                type="button"
+                onClick={() => setFocusFilter("all")}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                  focusFilter === "all"
+                    ? "bg-brand-secondary text-white"
+                    : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
+                }`}
+              >
+                All Focus Areas
+              </button>
+              {focusTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setFocusFilter(tag)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    focusFilter === tag
+                      ? "bg-brand-secondary text-white"
+                      : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <p className="w-full text-xs font-bold uppercase tracking-wide text-purple-700 dark:text-purple-200">
+                Postures
+              </p>
+              <button
+                type="button"
+                onClick={() => setPostureFilter("all")}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                  postureFilter === "all"
+                    ? "bg-purple-700 text-white"
+                    : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                }`}
+              >
+                All Postures
+              </button>
+              {postureTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setPostureFilter(tag)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    postureFilter === tag
+                      ? "bg-purple-700 text-white"
+                      : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </>
+        ) : null}
         <p className="mt-2 text-xs font-semibold text-purple-700 dark:text-purple-300">
           {filteredWorkouts.length} workouts shown
         </p>
+        <button
+          type="button"
+          onClick={() => setShowFilters((open) => !open)}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-md border border-purple-300 bg-white/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-purple-800 transition hover:bg-white dark:border-purple-700 dark:bg-slate-800 dark:text-purple-200 dark:hover:bg-slate-700"
+        >
+          <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
+          <svg
+            viewBox="0 0 24 24"
+            className={`h-4 w-4 transition-transform ${showFilters ? "rotate-180" : "rotate-0"}`}
+            aria-hidden="true"
+          >
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
       <div className="grid gap-4">

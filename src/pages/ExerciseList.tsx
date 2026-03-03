@@ -18,6 +18,7 @@ export default function ExerciseList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const workouts = useWorkoutStore((state) => state.workouts);
   const [query, setQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(true);
   const [typeFilter, setTypeFilter] = useState<ExerciseTypeFilter>("all");
   const [postureFilter, setPostureFilter] = useState<PostureFilter>("all");
   const [focusFilter, setFocusFilter] = useState<FocusFilter>("all");
@@ -106,84 +107,102 @@ export default function ExerciseList() {
           />
         </label>
 
-        <div className="flex flex-wrap gap-2">
-          {(["all", "standing", "bodyweight"] as const).map((value) => {
-            const active = typeFilter === value;
-            return (
-              <button
-                key={`type-${value}`}
-                type="button"
-                onClick={() => setTypeFilter(value)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                  active
-                    ? "bg-brand-primary text-white"
-                    : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-                }`}
-              >
-                {value === "all" ? "All Types" : value === "standing" ? "Standing" : "Bodyweight"}
-              </button>
-            );
-          })}
-        </div>
+        {showFilters ? (
+          <>
+            <div className="flex flex-wrap gap-2">
+              {(["all", "standing", "bodyweight"] as const).map((value) => {
+                const active = typeFilter === value;
+                return (
+                  <button
+                    key={`type-${value}`}
+                    type="button"
+                    onClick={() => setTypeFilter(value)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      active
+                        ? "bg-brand-primary text-white"
+                        : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                    }`}
+                  >
+                    {value === "all" ? "All Types" : value === "standing" ? "Standing" : "Bodyweight"}
+                  </button>
+                );
+              })}
+            </div>
 
-        <div className="flex flex-wrap gap-2">
-          {(["all", "warmup-stretch", "cooldown"] as const).map((value) => {
-            const active = focusFilter === value;
-            return (
-              <button
-                key={`focus-${value}`}
-                type="button"
-                onClick={() => setFocusFilter(value)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                  active
-                    ? "bg-brand-secondary text-white"
-                    : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
-                }`}
-              >
-                {value === "all"
-                  ? "All Focus Areas"
-                  : value === "warmup-stretch"
-                    ? "Warm-Up / Stretch"
-                    : "Cooldown"}
-              </button>
-            );
-          })}
-        </div>
+            <div className="flex flex-wrap gap-2">
+              {(["all", "warmup-stretch", "cooldown"] as const).map((value) => {
+                const active = focusFilter === value;
+                return (
+                  <button
+                    key={`focus-${value}`}
+                    type="button"
+                    onClick={() => setFocusFilter(value)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      active
+                        ? "bg-brand-secondary text-white"
+                        : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                    }`}
+                  >
+                    {value === "all"
+                      ? "All Focus Areas"
+                      : value === "warmup-stretch"
+                        ? "Warm-Up / Stretch"
+                        : "Cooldown"}
+                  </button>
+                );
+              })}
+            </div>
 
-        <div className="flex flex-wrap gap-2">
-          {(["all", "standing", "hands", "back", "prone"] as const).map((value) => {
-            const active = postureFilter === value;
-            const label =
-              value === "all"
-                ? "All Postures"
-                : value === "hands"
-                  ? "Hands"
-                  : value === "back"
-                    ? "On Back"
-                    : value === "prone"
-                      ? "Prone"
-                      : "Standing";
+            <div className="flex flex-wrap gap-2">
+              {(["all", "standing", "hands", "back", "prone"] as const).map((value) => {
+                const active = postureFilter === value;
+                const label =
+                  value === "all"
+                    ? "All Postures"
+                    : value === "hands"
+                      ? "Hands"
+                      : value === "back"
+                        ? "On Back"
+                        : value === "prone"
+                          ? "Prone"
+                          : "Standing";
 
-            return (
-              <button
-                key={`posture-${value}`}
-                type="button"
-                onClick={() => setPostureFilter(value)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                  active
-                    ? "bg-brand-secondary text-white"
-                    : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
+                return (
+                  <button
+                    key={`posture-${value}`}
+                    type="button"
+                    onClick={() => setPostureFilter(value)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      active
+                        ? "bg-brand-secondary text-white"
+                        : "border border-orange-300 text-orange-900 dark:border-orange-700 dark:text-orange-200"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : null}
 
         <p className="text-xs font-semibold text-purple-700 dark:text-purple-300">
           {filteredExercises.length} exercises shown
         </p>
+        <button
+          type="button"
+          onClick={() => setShowFilters((open) => !open)}
+          className="flex w-full items-center justify-center gap-2 rounded-md border border-purple-300 bg-white/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-purple-800 transition hover:bg-white dark:border-purple-700 dark:bg-slate-800 dark:text-purple-200 dark:hover:bg-slate-700"
+        >
+          <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
+          <svg
+            viewBox="0 0 24 24"
+            className={`h-4 w-4 transition-transform ${showFilters ? "rotate-180" : "rotate-0"}`}
+            aria-hidden="true"
+          >
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
       <div className="grid gap-4">
