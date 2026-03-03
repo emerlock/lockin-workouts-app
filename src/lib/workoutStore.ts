@@ -5,11 +5,17 @@ import {
   buildFiveMinuteWarmupRoutine,
   buildStandingIntervalRoutine,
 } from "./routines";
+import {
+  deleteUserWorkoutFromSupabase,
+  persistUserWorkoutToSupabase,
+} from "./supabaseUserWorkouts";
 import type { Exercise, Workout } from "../types/workout";
 
 type WorkoutState = {
   workouts: Workout[];
   addWorkout: (workout: Omit<Workout, "id">) => void;
+  removeWorkout: (workoutId: string) => void;
+  setWorkouts: (workouts: Workout[]) => void;
   getWorkoutById: (id: string) => Workout | undefined;
 };
 
@@ -205,9 +211,28 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
       ],
     }),
   ],
+  setWorkouts: (workouts) => set(() => ({ workouts })),
   addWorkout: (workout) =>
-    set((state) => ({
-      workouts: [...state.workouts, { id: crypto.randomUUID(), ...workout }],
-    })),
+    set((state) => {
+      const nextWorkout: Workout = { id: crypto.randomUUID(), ...workout };
+      void persistUserWorkoutToSupabase(nextWorkout).catch((error) => {
+        const message = error instanceof Error ? error.message : "Failed to persist workout.";
+        console.error("[supabase-user-workout]", message);
+      });
+      return {
+        workouts: [...state.workouts, nextWorkout],
+      };
+    }),
+  removeWorkout: (workoutId) =>
+    set((state) => {
+      void deleteUserWorkoutFromSupabase(workoutId).catch((error) => {
+        const message = error instanceof Error ? error.message : "Failed to delete workout.";
+        console.error("[supabase-user-workout]", message);
+      });
+
+      return {
+        workouts: state.workouts.filter((workout) => workout.id !== workoutId),
+      };
+    }),
   getWorkoutById: (id) => get().workouts.find((workout) => workout.id === id),
 }));

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { validateSafeTextInput } from "../lib/inputGuard";
 import { useWorkoutStore } from "../lib/workoutStore";
 
 const TYPE_TAGS = new Set(["standing", "bodyweight", "warm-up", "cooldown"]);
@@ -8,7 +9,9 @@ const POSTURE_TAGS = new Set(["upright", "hands-based", "on-back", "prone"]);
 export default function WorkoutList() {
   const WORKOUTS_PER_PAGE = 5;
   const workouts = useWorkoutStore((state) => state.workouts);
+  const removeWorkout = useWorkoutStore((state) => state.removeWorkout);
   const [query, setQuery] = useState("");
+  const [queryError, setQueryError] = useState("");
   const [showFilters, setShowFilters] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
   const [focusFilter, setFocusFilter] = useState("all");
@@ -77,10 +80,24 @@ export default function WorkoutList() {
       <div className="card-modern sticky top-2 z-30 bg-white/95 backdrop-blur dark:bg-slate-900/95">
         <input
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            const validated = validateSafeTextInput(event.target.value, {
+              maxLength: 120,
+              allowEmpty: true,
+            });
+            if (validated.error) {
+              setQueryError(validated.error);
+              return;
+            }
+            setQuery(validated.value);
+            setQueryError("");
+          }}
           placeholder="Search workouts..."
           className="input-modern"
         />
+        {queryError ? (
+          <p className="mt-2 text-xs font-medium text-orange-700 dark:text-orange-300">{queryError}</p>
+        ) : null}
         {showFilters ? (
           <>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -223,10 +240,26 @@ export default function WorkoutList() {
             <p className="mt-2 text-xs text-purple-600 dark:text-purple-300">
               {workout.exercises.length} exercises
             </p>
-            <div className="mt-3">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <Link to={`/workouts/${workout.id}`} className="btn-primary inline-flex">
                 Open Workout
               </Link>
+              {workout.tags.some((tag) => tag.toLowerCase() === "custom") ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const confirmed = window.confirm(
+                      `Delete "${workout.name}"? This cannot be undone.`,
+                    );
+                    if (confirmed) {
+                      removeWorkout(workout.id);
+                    }
+                  }}
+                  className="rounded-md border border-orange-300 px-3 py-2 text-xs font-semibold text-orange-800 transition hover:bg-orange-50 dark:border-orange-700 dark:text-orange-200 dark:hover:bg-orange-950/40"
+                >
+                  Delete
+                </button>
+              ) : null}
             </div>
           </article>
         ))}

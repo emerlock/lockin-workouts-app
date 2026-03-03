@@ -22,6 +22,21 @@ It includes guided interval playback, warm-up/cooldown support, infographic-base
 npm install
 ```
 
+## Supabase Setup (Secure Client Access)
+1. Copy env template and add your project values:
+```bash
+cp .env.example .env
+```
+2. Set:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (publishable key)
+- `VITE_SUPABASE_SYNC=true` to hydrate workouts from DB at startup
+3. Never put `service_role` key in frontend env files.
+4. Apply DB schema with [20260302120000_init_lockin_workouts.sql](./supabase/migrations/20260302120000_init_lockin_workouts.sql).
+5. Apply per-user auth persistence migration with [20260302133000_add_user_workouts_auth_rls.sql](./supabase/migrations/20260302133000_add_user_workouts_auth_rls.sql).
+5. Seed data with [seed.sql](./supabase/seed.sql).
+6. In Supabase Auth, enable Email provider (magic link) for sign-in from Settings.
+
 ## Run Dev Server
 ```bash
 npm run dev
@@ -62,6 +77,10 @@ npm run test:run
   - exercise sections separated into Warm-Up / Core Workout / Cooldown
   - collapsible exercises accordion (collapsed by default)
   - interval player with floating playback widget, progress, chime, and TTS announcements
+- Secure Supabase integration:
+  - anon publishable key in frontend only
+  - optional DB hydration via `VITE_SUPABASE_SYNC=true`
+  - per-user custom workout persistence using `user_workouts` table with `auth.uid()` RLS policies
 - Included short templates:
   - 5-Minute Warm-Up Flow (5 x 60s)
   - 5-Minute Cooldown Flow (5 x 60s)
@@ -74,6 +93,9 @@ src/
   pages/
   types/
 docs/
+supabase/
+  migrations/
+  seed.sql
 ```
 
 ## License
