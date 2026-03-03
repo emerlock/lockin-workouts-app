@@ -13,7 +13,7 @@ export type RoutineInterval = {
   label: string;
   description: string;
   type: "exercise" | "walk";
-  durationSeconds: 30;
+  durationSeconds: number;
 };
 
 export type WorkoutRoutine = {

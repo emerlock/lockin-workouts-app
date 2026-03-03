@@ -50,6 +50,37 @@ const PRONE_POSTURE_IDS = new Set<string>([
   "prone-swimmers",
 ]);
 
+export const WARMUP_STRETCH_EXERCISE_IDS = new Set<string>([
+  "neck-rolls",
+  "shoulder-rolls",
+  "standing-torso-rotations",
+  "hip-circles",
+  "ankle-circles",
+  "standing-quad-stretch",
+  "dynamic-hamstring-scoops",
+  "standing-calf-stretch",
+  "overhead-side-reach-stretch",
+  "chest-opener-stretch",
+  "cat-cow-standing",
+  "standing-figure-four-stretch",
+  "standing-lat-stretch",
+  "wrist-circles",
+  "standing-adductor-rocks",
+]);
+
+export const COOLDOWN_EXERCISE_IDS = new Set<string>([
+  "standing-forward-fold-stretch",
+  "cross-body-shoulder-stretch",
+  "overhead-triceps-stretch",
+  "standing-calf-hold-stretch",
+  "standing-quad-hold-stretch",
+  "standing-figure-four-hold",
+  "standing-hamstring-hold-stretch",
+  "side-neck-stretch",
+  "chest-clasp-stretch",
+  "deep-breathing-arm-sweeps",
+]);
+
 function createExercise(
   id: Exercise["id"],
   name: string,
@@ -314,6 +345,256 @@ export const STANDING_NO_EQUIPMENT_EXERCISES: Exercise[] = [
       "Stand tall with one arm overhead.",
       "Bend torso to the opposite side without leaning forward.",
       "Return upright and alternate sides.",
+    ],
+  ),
+  createExercise(
+    "neck-rolls",
+    "Neck Rolls",
+    "Gently roll your head in controlled circles to release neck tension before training.",
+    [
+      "Stand tall with shoulders relaxed and chin slightly tucked.",
+      "Slowly roll your head in one direction through a comfortable range.",
+      "Reverse direction and keep movements smooth and pain-free.",
+    ],
+  ),
+  createExercise(
+    "shoulder-rolls",
+    "Shoulder Rolls",
+    "Roll shoulders up, back, and down to warm the upper back and shoulder joints.",
+    [
+      "Stand upright with arms relaxed by your sides.",
+      "Lift shoulders toward ears, then roll them back and down.",
+      "Repeat for several reps, then roll in the opposite direction.",
+    ],
+  ),
+  createExercise(
+    "standing-torso-rotations",
+    "Standing Torso Rotations",
+    "Rotate your trunk side to side to prepare your spine and core for movement.",
+    [
+      "Stand hip-width with soft knees and core lightly braced.",
+      "Rotate your torso to one side while keeping hips mostly forward.",
+      "Return to center and alternate sides under control.",
+    ],
+  ),
+  createExercise(
+    "hip-circles",
+    "Hip Circles",
+    "Draw smooth circles with your hips to loosen the hips and lower back.",
+    [
+      "Stand with feet shoulder-width and hands on hips.",
+      "Circle your hips in one direction with controlled range.",
+      "Switch directions while keeping posture tall.",
+    ],
+  ),
+  createExercise(
+    "ankle-circles",
+    "Ankle Circles",
+    "Lift one foot and rotate the ankle joint to improve ankle mobility and balance.",
+    [
+      "Shift weight to one leg and lift the other foot slightly.",
+      "Circle the lifted ankle slowly in one direction.",
+      "Reverse the circle and then switch to the other ankle.",
+    ],
+  ),
+  createExercise(
+    "standing-quad-stretch",
+    "Standing Quad Stretch",
+    "Pull heel to glute to lengthen the front thigh and open the hip flexors.",
+    [
+      "Stand tall and hold support if needed for balance.",
+      "Grab one ankle and gently pull heel toward your glute.",
+      "Hold briefly, release, and switch sides.",
+    ],
+  ),
+  createExercise(
+    "dynamic-hamstring-scoops",
+    "Dynamic Hamstring Scoops",
+    "Sweep hands toward toes with a straight leg to warm hamstrings dynamically.",
+    [
+      "Step one heel forward with toes up and knee soft.",
+      "Hinge at hips and sweep both hands toward your toes.",
+      "Stand back up and alternate sides.",
+    ],
+  ),
+  createExercise(
+    "standing-calf-stretch",
+    "Standing Calf Stretch",
+    "Step one foot back and press heel down to stretch calf and Achilles.",
+    [
+      "Step one leg back and keep that heel pressing toward the floor.",
+      "Bend the front knee while keeping back leg mostly straight.",
+      "Hold briefly, then switch sides.",
+    ],
+  ),
+  createExercise(
+    "overhead-side-reach-stretch",
+    "Overhead Side Reach Stretch",
+    "Reach overhead and arc side to side to lengthen lats and obliques.",
+    [
+      "Stand tall and raise both arms overhead.",
+      "Reach up and bend gently to one side.",
+      "Return to center and repeat on the other side.",
+    ],
+  ),
+  createExercise(
+    "chest-opener-stretch",
+    "Chest Opener Stretch",
+    "Open through the chest and shoulders by pulling arms behind your body.",
+    [
+      "Stand tall and clasp hands behind your back if comfortable.",
+      "Draw shoulders back and gently lift arms away from body.",
+      "Hold briefly with steady breathing, then release.",
+    ],
+  ),
+  createExercise(
+    "cat-cow-standing",
+    "Standing Cat-Cow",
+    "Alternate rounding and arching the spine in standing to mobilize the back before training.",
+    [
+      "Stand with hands on thighs and knees slightly bent.",
+      "Round upper back and tuck chin gently.",
+      "Then lift chest and lengthen spine, alternating smoothly.",
+    ],
+  ),
+  createExercise(
+    "standing-figure-four-stretch",
+    "Standing Figure-Four Stretch",
+    "Cross ankle over opposite thigh and sit back slightly to open glutes and hips.",
+    [
+      "Stand tall and shift weight onto one leg.",
+      "Cross opposite ankle above your standing knee.",
+      "Sit hips back gently, then switch sides.",
+    ],
+  ),
+  createExercise(
+    "standing-lat-stretch",
+    "Standing Lat Stretch",
+    "Reach overhead and lean slightly to target the lats and side body.",
+    [
+      "Raise one arm overhead with shoulder relaxed.",
+      "Lean your torso away from the raised arm.",
+      "Breathe into the stretch, then switch sides.",
+    ],
+  ),
+  createExercise(
+    "wrist-circles",
+    "Wrist Circles",
+    "Rotate wrists through full range to prepare hands and forearms for pressing and plank work.",
+    [
+      "Extend arms in front of you at chest height.",
+      "Rotate both wrists slowly in one direction.",
+      "Reverse direction and keep circles controlled.",
+    ],
+  ),
+  createExercise(
+    "standing-adductor-rocks",
+    "Standing Adductor Rocks",
+    "Shift side to side into a lateral stance to open inner thighs and hips dynamically.",
+    [
+      "Take a wide stance with toes mostly forward.",
+      "Shift weight to one side while keeping the other leg long.",
+      "Rock to the opposite side in a controlled rhythm.",
+    ],
+  ),
+  createExercise(
+    "standing-forward-fold-stretch",
+    "Standing Forward Fold Stretch",
+    "Hinge at the hips and relax into a gentle hamstring and lower-back stretch.",
+    [
+      "Stand with feet hip-width and soften your knees.",
+      "Hinge at your hips and fold your torso toward your legs.",
+      "Breathe slowly and gradually deepen the stretch.",
+    ],
+  ),
+  createExercise(
+    "cross-body-shoulder-stretch",
+    "Cross-Body Shoulder Stretch",
+    "Pull one arm across your chest to release rear shoulder tension.",
+    [
+      "Stand tall and extend one arm across your chest.",
+      "Use the opposite arm to gently pull it closer.",
+      "Hold, release, and switch sides.",
+    ],
+  ),
+  createExercise(
+    "overhead-triceps-stretch",
+    "Overhead Triceps Stretch",
+    "Reach one elbow overhead and gently press for triceps and lat flexibility.",
+    [
+      "Raise one arm overhead and bend the elbow behind your head.",
+      "Use your opposite hand to gently guide the elbow.",
+      "Hold and switch arms.",
+    ],
+  ),
+  createExercise(
+    "standing-calf-hold-stretch",
+    "Standing Calf Hold Stretch",
+    "Step one leg back and press the heel down to lengthen calf muscles.",
+    [
+      "Step one foot back and keep the back heel grounded.",
+      "Bend the front knee until you feel a calf stretch.",
+      "Hold and switch sides.",
+    ],
+  ),
+  createExercise(
+    "standing-quad-hold-stretch",
+    "Standing Quad Hold Stretch",
+    "Pull one ankle toward your glute to stretch the front thigh.",
+    [
+      "Stand tall and grab one ankle behind you.",
+      "Gently pull heel toward glute while keeping knees close.",
+      "Hold and switch sides.",
+    ],
+  ),
+  createExercise(
+    "standing-figure-four-hold",
+    "Standing Figure-Four Hold",
+    "Cross one ankle over opposite thigh and sit back to stretch glutes.",
+    [
+      "Balance on one leg and cross the opposite ankle above your knee.",
+      "Sit hips back slightly while keeping chest lifted.",
+      "Hold and switch legs.",
+    ],
+  ),
+  createExercise(
+    "standing-hamstring-hold-stretch",
+    "Standing Hamstring Hold Stretch",
+    "Extend one heel forward and hinge gently to stretch the hamstring.",
+    [
+      "Place one heel slightly in front with toes up.",
+      "Hinge your hips back and keep your spine long.",
+      "Hold and switch sides.",
+    ],
+  ),
+  createExercise(
+    "side-neck-stretch",
+    "Side Neck Stretch",
+    "Tilt your head to one side with gentle hand pressure to release neck tightness.",
+    [
+      "Stand tall with relaxed shoulders.",
+      "Tilt your ear toward one shoulder.",
+      "Apply light pressure with your hand, then switch sides.",
+    ],
+  ),
+  createExercise(
+    "chest-clasp-stretch",
+    "Chest Clasp Stretch",
+    "Clasp hands behind your back and open your chest to ease shoulder tension.",
+    [
+      "Interlace fingers behind your back.",
+      "Draw shoulder blades together and gently lift your hands.",
+      "Hold with steady breathing, then release.",
+    ],
+  ),
+  createExercise(
+    "deep-breathing-arm-sweeps",
+    "Deep Breathing Arm Sweeps",
+    "Slow arm sweeps coordinated with breathing to lower heart rate post-workout.",
+    [
+      "Inhale as you sweep both arms overhead.",
+      "Exhale slowly as you lower arms back down.",
+      "Repeat with long, controlled breaths.",
     ],
   ),
   createExercise(

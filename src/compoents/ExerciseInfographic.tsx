@@ -1,4 +1,5 @@
 import type { Exercise } from "../types/workout";
+import type { ReactNode } from "react";
 
 type ExerciseInfographicProps = {
   exercise: Exercise;
@@ -8,6 +9,21 @@ type ExerciseInfographicProps = {
 
 type FigurePose =
   | "neutral"
+  | "neck-roll"
+  | "side-neck-stretch"
+  | "shoulder-roll"
+  | "torso-rotation"
+  | "ankle-circle"
+  | "calf-stretch"
+  | "chest-opener"
+  | "cat-stand"
+  | "cow-stand"
+  | "figure-four"
+  | "wrist-circle"
+  | "cross-body-shoulder"
+  | "triceps-overhead"
+  | "forward-fold-hold"
+  | "breathing-sweep"
   | "jack-open"
   | "knee-drive"
   | "squat-down"
@@ -184,6 +200,206 @@ const EXERCISE_VISUALS: Record<string, ExerciseVisual> = {
       { label: "Reverse", pose: "arm-circle", cue: "Then backward circles" },
     ],
   },
+  "neck-rolls": {
+    title: "Slow neck mobility circles",
+    frames: [
+      { label: "Tall", pose: "neutral", cue: "Shoulders relaxed, chin neutral" },
+      { label: "Roll", pose: "neck-roll", cue: "Gently circle head", side: "right" },
+      { label: "Reverse", pose: "neck-roll", cue: "Switch direction slowly", side: "left" },
+    ],
+  },
+  "shoulder-rolls": {
+    title: "Shoulders up, back, down",
+    frames: [
+      { label: "Start", pose: "neutral", cue: "Arms relaxed at sides" },
+      { label: "Back Roll", pose: "shoulder-roll", cue: "Lift and roll shoulders backward" },
+      { label: "Forward", pose: "shoulder-roll", cue: "Reverse roll direction" },
+    ],
+  },
+  "standing-torso-rotations": {
+    title: "Controlled trunk rotations",
+    frames: [
+      { label: "Center", pose: "neutral", cue: "Knees soft, core braced" },
+      { label: "Rotate", pose: "torso-rotation", cue: "Turn torso to one side", side: "right" },
+      { label: "Switch", pose: "torso-rotation", cue: "Rotate opposite side", side: "left" },
+    ],
+  },
+  "hip-circles": {
+    title: "Circular hip mobility pattern",
+    frames: [
+      { label: "Stacked", pose: "neutral", cue: "Hands on hips" },
+      { label: "Circle", pose: "hip-abduction", cue: "Draw a smooth hip circle" },
+      { label: "Reverse", pose: "hip-abduction", cue: "Switch circle direction" },
+    ],
+  },
+  "ankle-circles": {
+    title: "Single-leg ankle rotations",
+    frames: [
+      { label: "Balance", pose: "neutral", cue: "Stand tall on one leg" },
+      { label: "Circle", pose: "ankle-circle", cue: "Rotate lifted ankle", side: "right" },
+      { label: "Switch", pose: "ankle-circle", cue: "Change leg and direction", side: "left" },
+    ],
+  },
+  "standing-quad-stretch": {
+    title: "Heel-to-glute quad stretch",
+    frames: [
+      { label: "Tall", pose: "neutral", cue: "Find balance and brace" },
+      { label: "Stretch", pose: "quad-pull", cue: "Pull heel toward glute", side: "right" },
+      { label: "Switch", pose: "quad-pull", cue: "Repeat opposite side", side: "left" },
+    ],
+  },
+  "dynamic-hamstring-scoops": {
+    title: "Heel forward and scoop",
+    frames: [
+      { label: "Step", pose: "neutral", cue: "Place heel forward, toes up" },
+      { label: "Scoop", pose: "toe-touch", cue: "Sweep hands toward toes", side: "right" },
+      { label: "Switch", pose: "toe-touch", cue: "Alternate sides", side: "left" },
+    ],
+  },
+  "standing-calf-stretch": {
+    title: "Back-leg calf stretch",
+    frames: [
+      { label: "Split Stance", pose: "lunge-back", cue: "One foot steps back" },
+      { label: "Press Heel", pose: "calf-stretch", cue: "Rear heel presses down" },
+      { label: "Switch", pose: "calf-stretch", cue: "Change leg positions", side: "left" },
+    ],
+  },
+  "overhead-side-reach-stretch": {
+    title: "Overhead side-body stretch",
+    frames: [
+      { label: "Reach Up", pose: "arm-circle", cue: "Arms overhead and long spine" },
+      { label: "Side Bend", pose: "side-bend", cue: "Lean to one side", side: "right" },
+      { label: "Switch", pose: "side-bend", cue: "Lean to other side", side: "left" },
+    ],
+  },
+  "chest-opener-stretch": {
+    title: "Open chest and front shoulders",
+    frames: [
+      { label: "Setup", pose: "neutral", cue: "Hands clasp behind body" },
+      { label: "Open", pose: "chest-opener", cue: "Lift chest and draw shoulders back" },
+      { label: "Release", pose: "neutral", cue: "Return to tall posture" },
+    ],
+  },
+  "cat-cow-standing": {
+    title: "Standing spine flex and extend",
+    frames: [
+      { label: "Setup", pose: "neutral", cue: "Hands on thighs, knees soft" },
+      { label: "Cat", pose: "cat-stand", cue: "Round upper back gently" },
+      { label: "Cow", pose: "cow-stand", cue: "Lift chest and lengthen spine" },
+    ],
+  },
+  "standing-figure-four-stretch": {
+    title: "Figure-four glute stretch",
+    frames: [
+      { label: "Balance", pose: "neutral", cue: "Stand tall on one leg" },
+      { label: "Cross", pose: "figure-four", cue: "Ankle crosses above opposite knee", side: "right" },
+      { label: "Switch", pose: "figure-four", cue: "Repeat opposite side", side: "left" },
+    ],
+  },
+  "standing-lat-stretch": {
+    title: "Overhead lat lengthening",
+    frames: [
+      { label: "Reach", pose: "arm-circle", cue: "One arm reaches overhead" },
+      { label: "Lean", pose: "side-bend", cue: "Bend away from raised arm", side: "right" },
+      { label: "Switch", pose: "side-bend", cue: "Alternate sides", side: "left" },
+    ],
+  },
+  "wrist-circles": {
+    title: "Wrist mobility circles",
+    frames: [
+      { label: "Arms Out", pose: "wrist-circle", cue: "Arms forward at chest height" },
+      { label: "Rotate", pose: "wrist-circle", cue: "Circle wrists one direction", side: "right" },
+      { label: "Reverse", pose: "wrist-circle", cue: "Reverse wrist direction", side: "left" },
+    ],
+  },
+  "standing-adductor-rocks": {
+    title: "Lateral rocks for inner thighs",
+    frames: [
+      { label: "Wide Base", pose: "neutral", cue: "Take a wide stance" },
+      { label: "Rock", pose: "side-step", cue: "Shift weight to one side", side: "right" },
+      { label: "Switch", pose: "side-step", cue: "Rock to opposite side", side: "left" },
+    ],
+  },
+  "standing-forward-fold-stretch": {
+    title: "Hip hinge into fold and breathe",
+    frames: [
+      { label: "Tall", pose: "neutral", cue: "Soften knees and stack posture" },
+      { label: "Fold", pose: "forward-fold-hold", cue: "Hinge forward from hips" },
+      { label: "Hold", pose: "forward-fold-hold", cue: "Relax neck and breathe slowly" },
+    ],
+  },
+  "cross-body-shoulder-stretch": {
+    title: "Arm crosses chest, then switch",
+    frames: [
+      { label: "Setup", pose: "neutral", cue: "Stand tall with shoulders down" },
+      { label: "Stretch", pose: "cross-body-shoulder", cue: "Pull arm across chest", side: "right" },
+      { label: "Switch", pose: "cross-body-shoulder", cue: "Repeat opposite arm", side: "left" },
+    ],
+  },
+  "overhead-triceps-stretch": {
+    title: "Elbow overhead triceps stretch",
+    frames: [
+      { label: "Lift Arm", pose: "neutral", cue: "Reach one arm overhead" },
+      { label: "Bend", pose: "triceps-overhead", cue: "Hand drops behind head", side: "right" },
+      { label: "Switch", pose: "triceps-overhead", cue: "Switch to other arm", side: "left" },
+    ],
+  },
+  "standing-calf-hold-stretch": {
+    title: "Back heel down calf hold",
+    frames: [
+      { label: "Split", pose: "lunge-back", cue: "Step one foot behind" },
+      { label: "Hold", pose: "calf-stretch", cue: "Press rear heel into floor", side: "right" },
+      { label: "Switch", pose: "calf-stretch", cue: "Change legs", side: "left" },
+    ],
+  },
+  "standing-quad-hold-stretch": {
+    title: "Heel toward glute hold",
+    frames: [
+      { label: "Balance", pose: "neutral", cue: "Stand tall and stable" },
+      { label: "Hold", pose: "quad-pull", cue: "Pull ankle toward glute", side: "right" },
+      { label: "Switch", pose: "quad-pull", cue: "Switch sides", side: "left" },
+    ],
+  },
+  "standing-figure-four-hold": {
+    title: "Figure-four glute hold",
+    frames: [
+      { label: "Balance", pose: "neutral", cue: "Root through standing foot" },
+      { label: "Cross", pose: "figure-four", cue: "Ankle over opposite thigh", side: "right" },
+      { label: "Switch", pose: "figure-four", cue: "Change legs", side: "left" },
+    ],
+  },
+  "standing-hamstring-hold-stretch": {
+    title: "Heel forward hamstring hold",
+    frames: [
+      { label: "Set Heel", pose: "neutral", cue: "Place heel forward with toes up" },
+      { label: "Hinge", pose: "toe-touch", cue: "Fold toward front leg", side: "right" },
+      { label: "Switch", pose: "toe-touch", cue: "Switch front leg", side: "left" },
+    ],
+  },
+  "side-neck-stretch": {
+    title: "Ear toward shoulder stretch",
+    frames: [
+      { label: "Tall", pose: "neutral", cue: "Relax shoulders down" },
+      { label: "Tilt", pose: "side-neck-stretch", cue: "Tilt and lightly guide", side: "right" },
+      { label: "Switch", pose: "side-neck-stretch", cue: "Repeat opposite side", side: "left" },
+    ],
+  },
+  "chest-clasp-stretch": {
+    title: "Clasp and open chest",
+    frames: [
+      { label: "Clasp", pose: "neutral", cue: "Hands interlaced behind back" },
+      { label: "Open", pose: "chest-opener", cue: "Lift chest and draw shoulders back" },
+      { label: "Breathe", pose: "chest-opener", cue: "Hold with slow breathing" },
+    ],
+  },
+  "deep-breathing-arm-sweeps": {
+    title: "Inhale up, exhale down",
+    frames: [
+      { label: "Start", pose: "neutral", cue: "Arms relaxed at sides" },
+      { label: "Inhale", pose: "breathing-sweep", cue: "Sweep arms overhead" },
+      { label: "Exhale", pose: "neutral", cue: "Lower arms slowly" },
+    ],
+  },
 };
 
 const FALLBACK_VISUAL: ExerciseVisual = {
@@ -214,6 +430,62 @@ function Segment({ from, to, color }: { from: Point; to: Point; color: string })
 
 function Joint({ at, color }: { at: Point; color: string }) {
   return <circle cx={at.x} cy={at.y} r={2.8} fill={color} opacity="0.95" />;
+}
+
+function Arrow({ from, to, color }: { from: Point; to: Point; color: string }) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  const lift = 3.6;
+  const start = { x: from.x + ux * lift, y: from.y + uy * lift };
+  const end = { x: to.x + ux * (lift + 5.4), y: to.y + uy * (lift + 5.4) };
+  const angle = Math.atan2(end.y - start.y, end.x - start.x);
+  const head = 5.2;
+  const wing = 2.6;
+  const shaftEnd = {
+    x: end.x - ux * (head * 0.9),
+    y: end.y - uy * (head * 0.9),
+  };
+  const px = -Math.sin(angle);
+  const py = Math.cos(angle);
+  const base = { x: end.x - ux * head, y: end.y - uy * head };
+  const left = { x: base.x + px * wing, y: base.y + py * wing };
+  const right = { x: base.x - px * wing, y: base.y - py * wing };
+  const headPoints = `${end.x},${end.y} ${left.x},${left.y} ${right.x},${right.y}`;
+
+  return (
+    <g>
+      <line
+        x1={start.x}
+        y1={start.y}
+        x2={shaftEnd.x}
+        y2={shaftEnd.y}
+        stroke="#111111"
+        strokeOpacity="0.95"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1={start.x}
+        y1={start.y}
+        x2={shaftEnd.x}
+        y2={shaftEnd.y}
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <polygon
+        points={headPoints}
+        fill={color}
+        stroke="#111111"
+        strokeOpacity="0.95"
+        strokeWidth="0.9"
+        strokeLinejoin="round"
+      />
+    </g>
+  );
 }
 
 function inferVisual(exercise: Exercise): ExerciseVisual {
@@ -544,6 +816,11 @@ function Figure({
           <Segment from={{ x: x - 4, y: bodyY }} to={{ x: x - 10, y: groundY }} color={color} />
           <Segment from={{ x: x - 12, y: bodyY }} to={{ x: x - 24, y: groundY }} color={color} />
           <Segment from={{ x: x + 8, y: bodyY }} to={{ x: x + 2, y: groundY }} color={color} />
+          <Arrow
+            from={{ x: x + 4, y: bodyY - (pose === "pushup-down" ? 10 : 2) }}
+            to={{ x: x + 4, y: bodyY + (pose === "pushup-down" ? -1 : 8) }}
+            color={color}
+          />
         </g>
       );
     }
@@ -559,6 +836,7 @@ function Figure({
           <Segment from={{ x: x - 2 * dir, y: 67 }} to={{ x: x - 14 * dir, y: groundY }} color={color} />
           <Segment from={{ x: x - 10 * dir, y: 71 }} to={{ x: x - 22 * dir, y: groundY }} color={color} />
           <Segment from={{ x: x + 2 * dir, y: 66 }} to={{ x: x + 12 * dir, y: groundY }} color={color} />
+          <Arrow from={{ x: x - 4 * dir, y: 58 }} to={{ x: x + 10 * dir, y: 58 }} color={color} />
         </g>
       );
     }
@@ -577,6 +855,7 @@ function Figure({
           />
           <Segment from={{ x: x - 20, y: 82 }} to={{ x: x - 24, y: groundY }} color={color} />
           <Segment from={{ x: x - 6, y: 72 }} to={{ x: x - 2, y: groundY }} color={color} />
+          <Arrow from={{ x: x - 8, y: 84 }} to={{ x: x - 8, y: 72 }} color={color} />
         </g>
       );
     }
@@ -594,6 +873,7 @@ function Figure({
           <Segment from={{ x: x + 6, y: 82 }} to={{ x: armX, y: 66 }} color={color} />
           <Segment from={{ x: x - 2, y: 82 }} to={{ x: legX, y: 60 }} color={color} />
           <Segment from={{ x: x - 8, y: 82 }} to={{ x: x - 12, y: 60 }} color={color} />
+          <Arrow from={{ x: x - 10, y: 80 }} to={{ x: legX, y: 64 }} color={color} />
         </g>
       );
     }
@@ -607,6 +887,7 @@ function Figure({
           <Segment from={{ x: x + 18, y: 76 }} to={{ x: x - 2, y: 78 }} color={color} />
           <Segment from={{ x: x + 6, y: 77 }} to={{ x: x - 14, y: 68 }} color={color} />
           <Segment from={{ x: x, y: 78 }} to={{ x: x - 16, y: 86 }} color={color} />
+          <Arrow from={{ x: x + 2, y: 80 }} to={{ x: x + 2, y: 70 }} color={color} />
         </g>
       );
     }
@@ -619,6 +900,7 @@ function Figure({
           <Segment from={{ x: x - 4, y: 60 }} to={{ x: x + 14, y: 84 }} color={color} />
           <Segment from={{ x: x + 14, y: 84 }} to={{ x: x + 20, y: groundY }} color={color} />
           <Segment from={{ x: x + 2, y: 68 }} to={{ x: x - 8, y: groundY }} color={color} />
+          <Arrow from={{ x: x + 4, y: 80 }} to={{ x: x + 4, y: 70 }} color={color} />
         </g>
       );
     }
@@ -634,6 +916,7 @@ function Figure({
           <Segment from={{ x: x - 4, y: 71 }} to={{ x: x + 14, y: 56 + 8 * dir }} color={color} />
           <Segment from={{ x: x + 2, y: 72 }} to={{ x: x - 6, y: groundY }} color={color} />
           <Segment from={{ x: x + 8, y: 73 }} to={{ x: x + 18, y: groundY }} color={color} />
+          <Arrow from={{ x: x + 6, y: 70 }} to={{ x: x + 14, y: 58 + 8 * dir }} color={color} />
         </g>
       );
     }
@@ -649,6 +932,8 @@ function Figure({
   let kneeRight = { x: x + 8, y: 72 };
   let footLeft = { x: x - 10, y: 94 };
   let footRight = { x: x + 10, y: 94 };
+  const extraMarks: ReactNode[] = [];
+  const movementArrows: Array<{ from: Point; to: Point }> = [];
 
   if (pose === "jack-open") {
     handLeft = { x: x - 22, y: 20 };
@@ -766,6 +1051,244 @@ function Figure({
     footRight = { x: x + 22, y: 94 };
     handLeft = { x: x - 20, y: 48 };
     handRight = { x: x + 14, y: 48 };
+  } else if (pose === "neck-roll") {
+    const offset = side === "left" ? -6 : 6;
+    handLeft = { x: x - 18, y: 44 };
+    handRight = { x: x + 18, y: 44 };
+    extraMarks.push(
+      <path
+        key="neck-roll-arc"
+        d={`M ${x - 6} 10 Q ${x} 4 ${x + 6} 10`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />,
+    );
+    shoulderLeft = { x: x - 11, y: 36 };
+    shoulderRight = { x: x + 11, y: 36 };
+    footLeft = { x: x - 10, y: 94 };
+    footRight = { x: x + 10, y: 94 };
+    kneeRight = { x: x + 8 + offset * 0.2, y: 72 };
+  } else if (pose === "shoulder-roll") {
+    shoulderLeft = { x: x - 11, y: 30 };
+    shoulderRight = { x: x + 11, y: 30 };
+    handLeft = { x: x - 20, y: 41 };
+    handRight = { x: x + 20, y: 41 };
+    extraMarks.push(
+      <path
+        key="shoulder-roll-left"
+        d={`M ${x - 22} 28 q -4 6 2 11`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />,
+      <path
+        key="shoulder-roll-right"
+        d={`M ${x + 22} 28 q 4 6 -2 11`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />,
+    );
+  } else if (pose === "torso-rotation") {
+    shoulderLeft = { x: x - 10 * sideDir, y: 36 };
+    shoulderRight = { x: x + 14 * sideDir, y: 34 };
+    handLeft = { x: x - 18 * sideDir, y: 42 };
+    handRight = { x: x + 24 * sideDir, y: 40 };
+  } else if (pose === "ankle-circle") {
+    kneeRight = { x: x + 12 * sideDir, y: 62 };
+    footRight = { x: x + 16 * sideDir, y: 60 };
+    extraMarks.push(
+      <circle
+        key="ankle-circle-orbit"
+        cx={x + 16 * sideDir}
+        cy={60}
+        r="5"
+        fill="none"
+        stroke={color}
+        strokeWidth="1.8"
+        strokeDasharray="3 2"
+      />,
+    );
+  } else if (pose === "calf-stretch") {
+    kneeLeft = { x: x - 4 * sideDir, y: 73 };
+    footLeft = { x: x + 4 * sideDir, y: 94 };
+    kneeRight = { x: x + 18 * sideDir, y: 72 };
+    footRight = { x: x + 28 * sideDir, y: 94 };
+    handLeft = { x: x - 16, y: 46 };
+    handRight = { x: x + 16, y: 46 };
+  } else if (pose === "chest-opener") {
+    handLeft = { x: x - 8, y: 50 };
+    handRight = { x: x + 8, y: 50 };
+    shoulderLeft = { x: x - 13, y: 34 };
+    shoulderRight = { x: x + 13, y: 34 };
+    extraMarks.push(
+      <path
+        key="chest-open-arc"
+        d={`M ${x - 10} 49 Q ${x} 55 ${x + 10} 49`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />,
+    );
+  } else if (pose === "cat-stand") {
+    shoulderLeft = { x: x - 14, y: 42 };
+    shoulderRight = { x: x + 6, y: 42 };
+    handLeft = { x: x - 18, y: 52 };
+    handRight = { x: x + 2, y: 52 };
+    extraMarks.push(
+      <path
+        key="cat-curve"
+        d={`M ${x - 8} 31 Q ${x - 2} 24 ${x + 4} 31`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />,
+    );
+  } else if (pose === "cow-stand") {
+    shoulderLeft = { x: x - 12, y: 33 };
+    shoulderRight = { x: x + 10, y: 33 };
+    handLeft = { x: x - 16, y: 46 };
+    handRight = { x: x + 14, y: 46 };
+    extraMarks.push(
+      <path
+        key="cow-curve"
+        d={`M ${x - 8} 29 Q ${x} 35 ${x + 8} 29`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />,
+    );
+  } else if (pose === "figure-four") {
+    kneeRight = { x: x + 4, y: 72 };
+    footRight = { x: x + 8, y: 94 };
+    kneeLeft = { x: x + 10 * sideDir, y: 64 };
+    footLeft = { x: x + 20 * sideDir, y: 66 };
+    handLeft = { x: x - 16, y: 44 };
+    handRight = { x: x + 16, y: 44 };
+  } else if (pose === "wrist-circle") {
+    shoulderLeft = { x: x - 10, y: 35 };
+    shoulderRight = { x: x + 10, y: 35 };
+    handLeft = { x: x - 16, y: 38 };
+    handRight = { x: x + 16, y: 38 };
+    extraMarks.push(
+      <circle
+        key="wrist-circle-left"
+        cx={x - 16}
+        cy={38}
+        r="4"
+        fill="none"
+        stroke={color}
+        strokeWidth="1.6"
+        strokeDasharray="2.5 2"
+      />,
+      <circle
+        key="wrist-circle-right"
+        cx={x + 16}
+        cy={38}
+        r="4"
+        fill="none"
+        stroke={color}
+        strokeWidth="1.6"
+        strokeDasharray="2.5 2"
+      />,
+    );
+  } else if (pose === "cross-body-shoulder") {
+    shoulderLeft = { x: x - 12, y: 35 };
+    shoulderRight = { x: x + 12, y: 35 };
+    handRight = { x: x - 18 * sideDir, y: 38 };
+    handLeft = { x: x - 4 * sideDir, y: 42 };
+  } else if (pose === "triceps-overhead") {
+    shoulderRight = { x: x + 8 * sideDir, y: 34 };
+    handRight = { x: x + 6 * sideDir, y: 18 };
+    handLeft = { x: x + 2 * sideDir, y: 24 };
+    shoulderLeft = { x: x - 8 * sideDir, y: 36 };
+  } else if (pose === "forward-fold-hold") {
+    shoulderLeft = { x: x - 16, y: 48 };
+    shoulderRight = { x: x + 2, y: 48 };
+    handLeft = { x: x - 20, y: 64 };
+    handRight = { x: x - 4, y: 64 };
+  } else if (pose === "side-neck-stretch") {
+    shoulderLeft = { x: x - 11, y: 36 };
+    shoulderRight = { x: x + 11, y: 36 };
+    handRight = { x: x + 3 * sideDir, y: 14 };
+    handLeft = { x: x - 18 * sideDir, y: 44 };
+    extraMarks.push(
+      <path
+        key="side-neck-arc"
+        d={`M ${x - 5} 11 Q ${x} ${8 + (side === "left" ? -1 : 1)} ${x + 5} 11`}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />,
+    );
+  } else if (pose === "breathing-sweep") {
+    handLeft = { x: x - 20, y: 18 };
+    handRight = { x: x + 20, y: 18 };
+  }
+
+  // Directional movement cues for all standing poses.
+  if (pose === "neutral") {
+    movementArrows.push({ from: { x, y: 58 }, to: { x, y: 48 } });
+  } else if (pose === "jack-open") {
+    movementArrows.push(
+      { from: { x: x - 10, y: 22 }, to: { x: x - 20, y: 18 } },
+      { from: { x: x + 10, y: 22 }, to: { x: x + 20, y: 18 } },
+    );
+  } else if (pose === "knee-drive" || pose === "march") {
+    movementArrows.push({ from: { x: x + 8 * sideDir, y: 74 }, to: { x: x + 16 * sideDir, y: 60 } });
+  } else if (pose === "squat-down" || pose === "split-squat" || pose === "wall-sit") {
+    movementArrows.push({ from: { x, y: 56 }, to: { x, y: 68 } });
+  } else if (pose === "lunge-back") {
+    movementArrows.push({ from: { x: x + 6, y: 78 }, to: { x: x + 16, y: 78 } });
+  } else if (pose === "calf-raise") {
+    movementArrows.push({ from: { x: x + 12, y: 92 }, to: { x: x + 12, y: 84 } });
+  } else if (pose === "oblique-crunch" || pose === "side-bend") {
+    movementArrows.push({ from: { x, y: 40 }, to: { x: x + 10 * sideDir, y: 46 } });
+  } else if (pose === "hip-hinge" || pose === "cat-stand") {
+    movementArrows.push({ from: { x: x + 2, y: 40 }, to: { x: x - 10, y: 46 } });
+  } else if (pose === "side-step") {
+    movementArrows.push({ from: { x: x - 2, y: 84 }, to: { x: x - 16, y: 84 } });
+  } else if (pose === "butt-kick" || pose === "quad-pull") {
+    movementArrows.push({ from: { x: x + 8 * sideDir, y: 80 }, to: { x: x + 3 * sideDir, y: 66 } });
+  } else if (pose === "front-kick") {
+    movementArrows.push({ from: { x: x + 8, y: 72 }, to: { x: x + 24, y: 64 } });
+  } else if (pose === "curtsy" || pose === "figure-four") {
+    movementArrows.push({ from: { x: x + 8, y: 78 }, to: { x: x - 2, y: 72 } });
+  } else if (pose === "hip-abduction") {
+    movementArrows.push({ from: { x: x + 10, y: 86 }, to: { x: x + 24, y: 82 } });
+  } else if (pose === "toe-touch") {
+    movementArrows.push({ from: { x: x - 2 * sideDir, y: 46 }, to: { x: x - 20 * sideDir, y: 60 } });
+  } else if (pose === "skater" || pose === "bound") {
+    movementArrows.push({ from: { x: x - 6, y: 74 }, to: { x: x + 10, y: 70 } });
+  } else if (pose === "arm-circle" || pose === "shoulder-roll" || pose === "wrist-circle") {
+    movementArrows.push({ from: { x: x + 18, y: 36 }, to: { x: x + 24, y: 30 } });
+  } else if (pose === "cross-body-shoulder") {
+    movementArrows.push({ from: { x: x + 10 * sideDir, y: 38 }, to: { x: x - 10 * sideDir, y: 38 } });
+  } else if (pose === "triceps-overhead") {
+    movementArrows.push({ from: { x: x + 8 * sideDir, y: 24 }, to: { x: x + 4 * sideDir, y: 16 } });
+  } else if (pose === "forward-fold-hold") {
+    movementArrows.push({ from: { x: x - 2, y: 42 }, to: { x: x - 8, y: 56 } });
+  } else if (pose === "side-neck-stretch") {
+    movementArrows.push({ from: { x, y: 10 }, to: { x: x + 8 * sideDir, y: 10 } });
+  } else if (pose === "breathing-sweep") {
+    movementArrows.push({ from: { x: x + 10, y: 30 }, to: { x: x + 18, y: 20 } });
+  } else if (pose === "punch" || pose === "torso-rotation") {
+    movementArrows.push({ from: { x: x + 10 * sideDir, y: 40 }, to: { x: x + 24 * sideDir, y: 40 } });
+  } else if (pose === "skip") {
+    movementArrows.push({ from: { x: x + 8 * sideDir, y: 72 }, to: { x: x + 18 * sideDir, y: 58 } });
+  } else if (pose === "neck-roll") {
+    movementArrows.push({ from: { x: x - 4, y: 9 }, to: { x: x + 6, y: 9 } });
+  } else if (pose === "ankle-circle") {
+    movementArrows.push({ from: { x: x + 14 * sideDir, y: 56 }, to: { x: x + 18 * sideDir, y: 62 } });
+  } else if (pose === "calf-stretch") {
+    movementArrows.push({ from: { x: x + 22 * sideDir, y: 92 }, to: { x: x + 22 * sideDir, y: 84 } });
+  } else if (pose === "chest-opener") {
+    movementArrows.push({ from: { x: x + 4, y: 48 }, to: { x: x + 16, y: 48 } });
+  } else if (pose === "cow-stand") {
+    movementArrows.push({ from: { x: x - 2, y: 38 }, to: { x: x + 6, y: 30 } });
   }
 
   return (
@@ -785,6 +1308,27 @@ function Figure({
       <Joint at={hip} color={color} />
       <Joint at={kneeLeft} color={color} />
       <Joint at={kneeRight} color={color} />
+      {movementArrows
+        .map((arrow) => {
+          const pelvisCenter = { x, y: 52 };
+          const isNearPelvis =
+            Math.abs(arrow.from.x - pelvisCenter.x) < 10 &&
+            arrow.from.y >= 48 &&
+            arrow.from.y <= 76;
+          if (!isNearPelvis) {
+            return arrow;
+          }
+
+          const sideOffset = arrow.from.x <= pelvisCenter.x ? -14 : 14;
+          return {
+            from: { x: arrow.from.x + sideOffset, y: arrow.from.y },
+            to: { x: arrow.to.x + sideOffset, y: arrow.to.y },
+          };
+        })
+        .map((arrow, index) => (
+        <Arrow key={`arrow-${index}`} from={arrow.from} to={arrow.to} color={color} />
+      ))}
+      {extraMarks}
     </g>
   );
 }

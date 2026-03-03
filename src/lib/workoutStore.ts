@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { STANDING_NO_EQUIPMENT_EXERCISES } from "./exercises";
-import { buildStandingIntervalRoutine } from "./routines";
+import {
+  buildFiveMinuteCooldownRoutine,
+  buildFiveMinuteWarmupRoutine,
+  buildStandingIntervalRoutine,
+} from "./routines";
 import type { Exercise, Workout } from "../types/workout";
 
 type WorkoutState = {
@@ -25,6 +29,7 @@ const buildSeedWorkout = ({
   sets,
   reps,
   exerciseIds,
+  routine,
 }: {
   id: string;
   name: string;
@@ -33,6 +38,7 @@ const buildSeedWorkout = ({
   sets: number;
   reps: number;
   exerciseIds: string[];
+  routine?: Workout["routine"];
 }): Workout => {
   const exercises = exerciseIds.map(exerciseById);
   return {
@@ -43,12 +49,58 @@ const buildSeedWorkout = ({
     sets,
     reps,
     exercises,
-    routine: buildStandingIntervalRoutine(exercises),
+    routine: routine ?? buildStandingIntervalRoutine(exercises),
   };
 };
 
 export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   workouts: [
+    buildSeedWorkout({
+      id: "0",
+      name: "5-Minute Warm-Up Flow",
+      description:
+        "A quick full-body mobility warm-up using only stretching and movement-prep exercises, one minute each.",
+      tags: ["warm-up", "stretching", "mobility", "standing"],
+      sets: 1,
+      reps: 5,
+      exerciseIds: [
+        "neck-rolls",
+        "shoulder-rolls",
+        "hip-circles",
+        "dynamic-hamstring-scoops",
+        "standing-calf-stretch",
+      ],
+      routine: buildFiveMinuteWarmupRoutine([
+        exerciseById("neck-rolls"),
+        exerciseById("shoulder-rolls"),
+        exerciseById("hip-circles"),
+        exerciseById("dynamic-hamstring-scoops"),
+        exerciseById("standing-calf-stretch"),
+      ]),
+    }),
+    buildSeedWorkout({
+      id: "0b",
+      name: "5-Minute Cooldown Flow",
+      description:
+        "A gentle post-workout cooldown with five mobility and stretching drills, one minute each.",
+      tags: ["cooldown", "stretching", "recovery", "standing"],
+      sets: 1,
+      reps: 5,
+      exerciseIds: [
+        "standing-forward-fold-stretch",
+        "cross-body-shoulder-stretch",
+        "overhead-triceps-stretch",
+        "standing-quad-hold-stretch",
+        "deep-breathing-arm-sweeps",
+      ],
+      routine: buildFiveMinuteCooldownRoutine([
+        exerciseById("standing-forward-fold-stretch"),
+        exerciseById("cross-body-shoulder-stretch"),
+        exerciseById("overhead-triceps-stretch"),
+        exerciseById("standing-quad-hold-stretch"),
+        exerciseById("deep-breathing-arm-sweeps"),
+      ]),
+    }),
     buildSeedWorkout({
       id: "1",
       name: "Standing Conditioning",

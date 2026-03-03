@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ExerciseInfographic from "../compoents/ExerciseInfographic";
-import { STANDING_NO_EQUIPMENT_EXERCISES } from "../lib/exercises";
+import {
+  COOLDOWN_EXERCISE_IDS,
+  STANDING_NO_EQUIPMENT_EXERCISES,
+  WARMUP_STRETCH_EXERCISE_IDS,
+} from "../lib/exercises";
 import { useWorkoutStore } from "../lib/workoutStore";
 import type { Exercise } from "../types/workout";
 
 type ExerciseTypeFilter = "all" | Exercise["exerciseType"];
 type PostureFilter = "all" | Exercise["posture"];
+type FocusFilter = "all" | "warmup-stretch" | "cooldown";
 
 export default function ExerciseList() {
   const EXERCISES_PER_PAGE = 10;
@@ -15,6 +20,7 @@ export default function ExerciseList() {
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<ExerciseTypeFilter>("all");
   const [postureFilter, setPostureFilter] = useState<PostureFilter>("all");
+  const [focusFilter, setFocusFilter] = useState<FocusFilter>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const activeTag = searchParams.get("tag")?.trim().toLowerCase() ?? "";
 
@@ -38,16 +44,20 @@ export default function ExerciseList() {
         exercise.description.toLowerCase().includes(query.toLowerCase());
       const matchesType = typeFilter === "all" || exercise.exerciseType === typeFilter;
       const matchesPosture = postureFilter === "all" || exercise.posture === postureFilter;
-      return matchesTag && matchesQuery && matchesType && matchesPosture;
+      const matchesFocus =
+        focusFilter === "all" ||
+        (focusFilter === "warmup-stretch" && WARMUP_STRETCH_EXERCISE_IDS.has(exercise.id)) ||
+        (focusFilter === "cooldown" && COOLDOWN_EXERCISE_IDS.has(exercise.id));
+      return matchesTag && matchesQuery && matchesType && matchesPosture && matchesFocus;
     });
-  }, [query, typeFilter, postureFilter, taggedExerciseIds]);
+  }, [query, typeFilter, postureFilter, focusFilter, taggedExerciseIds]);
   const totalPages = Math.max(1, Math.ceil(filteredExercises.length / EXERCISES_PER_PAGE));
   const pageStart = (currentPage - 1) * EXERCISES_PER_PAGE;
   const pagedExercises = filteredExercises.slice(pageStart, pageStart + EXERCISES_PER_PAGE);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [query, typeFilter, postureFilter, activeTag]);
+  }, [query, typeFilter, postureFilter, focusFilter, activeTag]);
 
   useEffect(() => {
     setCurrentPage((page) => Math.min(page, totalPages));
@@ -117,6 +127,30 @@ export default function ExerciseList() {
         </div>
 
         <div className="flex flex-wrap gap-2">
+          {(["all", "warmup-stretch", "cooldown"] as const).map((value) => {
+            const active = focusFilter === value;
+            return (
+              <button
+                key={`focus-${value}`}
+                type="button"
+                onClick={() => setFocusFilter(value)}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                  active
+                    ? "bg-brand-secondary text-white"
+                    : "border border-purple-300 text-purple-800 dark:border-purple-700 dark:text-purple-200"
+                }`}
+              >
+                {value === "all"
+                  ? "All Focus Areas"
+                  : value === "warmup-stretch"
+                    ? "Warm-Up / Stretch"
+                    : "Cooldown"}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
           {(["all", "standing", "hands", "back", "prone"] as const).map((value) => {
             const active = postureFilter === value;
             const label =
@@ -168,6 +202,16 @@ export default function ExerciseList() {
               <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-900 dark:bg-orange-950/60 dark:text-orange-200">
                 {exercise.posture}
               </span>
+              {WARMUP_STRETCH_EXERCISE_IDS.has(exercise.id) ? (
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200">
+                  warm-up/stretch
+                </span>
+              ) : null}
+              {COOLDOWN_EXERCISE_IDS.has(exercise.id) ? (
+                <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-900 dark:bg-sky-950/60 dark:text-sky-200">
+                  cooldown
+                </span>
+              ) : null}
             </div>
             <p className="mt-2 text-sm text-purple-700 dark:text-purple-300">{exercise.description}</p>
             <ExerciseInfographic exercise={exercise} size="large" />
