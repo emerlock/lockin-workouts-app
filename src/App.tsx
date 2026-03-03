@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import NavHeader from "./compoents/NavHeader";
 import { useThemeStore } from "./lib/themeStore";
+import { useSupabaseWorkoutSync } from "./lib/useSupabaseWorkoutSync";
 import Home from "./pages/Home";
 import ExerciseList from "./pages/ExerciseList";
 import Settings from "./pages/Settings";
@@ -11,6 +12,7 @@ import WorkoutList from "./pages/WorkoutList";
 
 export default function App() {
   const theme = useThemeStore((state) => state.theme);
+  useSupabaseWorkoutSync();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");

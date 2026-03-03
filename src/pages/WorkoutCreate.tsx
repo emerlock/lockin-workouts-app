@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
+import { Link, useNavigate } from "react-router-dom";
 import ExerciseInfographic from "../compoents/ExerciseInfographic";
 import { STANDING_NO_EQUIPMENT_EXERCISES } from "../lib/exercises";
+import { validateSafeTextInput } from "../lib/inputGuard";
 import { buildStandingIntervalRoutine } from "../lib/routines";
+import { getCurrentUser } from "../lib/supabaseAuth";
+import { getSupabaseClient, isSupabaseConfigured, isSupabaseSyncEnabled } from "../lib/supabase";
 import { useWorkoutStore } from "../lib/workoutStore";
 
 export default function WorkoutCreate() {
@@ -13,12 +17,17 @@ export default function WorkoutCreate() {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [sets, setSets] = useState(3);
   const [reps, setReps] = useState(10);
   const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([]);
   const [selectionError, setSelectionError] = useState("");
   const [exerciseFilter, setExerciseFilter] = useState<"all" | "standing" | "bodyweight">("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const requiresSignInToCreate =
+    isSupabaseConfigured && isSupabaseSyncEnabled && import.meta.env.MODE !== "test";
+  const [isCheckingAuth, setIsCheckingAuth] = useState(requiresSignInToCreate);
+  const [user, setUser] = useState<User | null>(null);
 
   const filteredExercises = STANDING_NO_EQUIPMENT_EXERCISES.filter((exercise) =>
     exerciseFilter === "all" ? true : exercise.exerciseType === exerciseFilter,
@@ -34,6 +43,37 @@ export default function WorkoutCreate() {
     setCurrentPage(1);
   }, [exerciseFilter]);
 
+  useEffect(() => {
+    if (!requiresSignInToCreate) {
+      setIsCheckingAuth(false);
+      return;
+    }
+
+    let cancelled = false;
+    const supabase = getSupabaseClient();
+
+    async function loadUser() {
+      const current = await getCurrentUser();
+      if (!cancelled) {
+        setUser(current);
+        setIsCheckingAuth(false);
+      }
+    }
+
+    void loadUser();
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!cancelled) {
+        setUser(session?.user ?? null);
+        setIsCheckingAuth(false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      data.subscription.unsubscribe();
+    };
+  }, []);
+
   const onExerciseToggle = (exerciseId: string, checked: boolean) => {
     setSelectedExerciseIds((prev) => {
       if (checked) {
@@ -46,8 +86,18 @@ export default function WorkoutCreate() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (requiresSignInToCreate && !user) {
+      setSelectionError("Please sign in from Settings before creating workouts.");
+      return;
+    }
 
     if (!name.trim()) {
+      setNameError("Workout name is required.");
+      return;
+    }
+    const validatedName = validateSafeTextInput(name, { maxLength: 80, allowEmpty: false });
+    if (validatedName.error) {
+      setNameError(validatedName.error);
       return;
     }
 
@@ -85,8 +135,9 @@ export default function WorkoutCreate() {
       .join(", ")}.`;
 
     setSelectionError("");
+    setNameError("");
     addWorkout({
-      name: name.trim(),
+      name: validatedName.value.trim(),
       description,
       tags,
       sets,
@@ -96,6 +147,33 @@ export default function WorkoutCreate() {
     });
     navigate("/workouts");
   };
+
+  if (isCheckingAuth) {
+    return (
+      <section className="card-modern max-w-2xl">
+        <h1 className="mb-2 text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">
+          Create Workout
+        </h1>
+        <p className="text-sm text-purple-700 dark:text-purple-200">Checking sign-in status...</p>
+      </section>
+    );
+  }
+
+  if (requiresSignInToCreate && !user) {
+    return (
+      <section className="card-modern max-w-2xl">
+        <h1 className="mb-2 text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">
+          Create Workout
+        </h1>
+        <p className="text-sm text-purple-700 dark:text-purple-200">
+          You must be signed in to create and save workouts.
+        </p>
+        <Link to="/settings" className="btn-primary mt-4 inline-flex">
+          Go to Settings to Sign In
+        </Link>
+      </section>
+    );
+  }
 
   return (
     <section className="card-modern max-w-2xl">
@@ -113,10 +191,22 @@ export default function WorkoutCreate() {
           </span>
           <input
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              const validated = validateSafeTextInput(event.target.value, {
+                maxLength: 80,
+                allowEmpty: true,
+              });
+              setName(validated.value);
+              setNameError(validated.error ?? "");
+            }}
             className="input-modern"
             placeholder="Leg Day"
           />
+          {nameError ? (
+            <span className="mt-1 block text-xs font-medium text-orange-700 dark:text-orange-300">
+              {nameError}
+            </span>
+          ) : null}
         </label>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

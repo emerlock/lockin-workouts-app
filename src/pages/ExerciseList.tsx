@@ -6,6 +6,9 @@ import {
   STANDING_NO_EQUIPMENT_EXERCISES,
   WARMUP_STRETCH_EXERCISE_IDS,
 } from "../lib/exercises";
+import { validateSafeTextInput } from "../lib/inputGuard";
+import { isSupabaseConfigured, isSupabaseSyncEnabled } from "../lib/supabase";
+import { fetchExerciseCatalogFromSupabase } from "../lib/supabaseExercises";
 import { useWorkoutStore } from "../lib/workoutStore";
 import type { Exercise } from "../types/workout";
 
@@ -18,12 +21,48 @@ export default function ExerciseList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const workouts = useWorkoutStore((state) => state.workouts);
   const [query, setQuery] = useState("");
+  const [queryError, setQueryError] = useState("");
   const [showFilters, setShowFilters] = useState(true);
   const [typeFilter, setTypeFilter] = useState<ExerciseTypeFilter>("all");
   const [postureFilter, setPostureFilter] = useState<PostureFilter>("all");
   const [focusFilter, setFocusFilter] = useState<FocusFilter>("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [allExercises, setAllExercises] = useState<Exercise[]>(STANDING_NO_EQUIPMENT_EXERCISES);
+  const [warmupIds, setWarmupIds] = useState<Set<string>>(new Set(WARMUP_STRETCH_EXERCISE_IDS));
+  const [cooldownIds, setCooldownIds] = useState<Set<string>>(new Set(COOLDOWN_EXERCISE_IDS));
   const activeTag = searchParams.get("tag")?.trim().toLowerCase() ?? "";
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function syncExercises() {
+      if (!isSupabaseSyncEnabled || !isSupabaseConfigured) {
+        return;
+      }
+
+      try {
+        const catalog = await fetchExerciseCatalogFromSupabase();
+        if (cancelled) {
+          return;
+        }
+        if (catalog.exercises.length > 0) {
+          setAllExercises(catalog.exercises);
+          setWarmupIds(catalog.warmupIds);
+          setCooldownIds(catalog.cooldownIds);
+        }
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to sync exercises from Supabase.";
+        console.error("[supabase-sync]", message);
+      }
+    }
+
+    void syncExercises();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const taggedExerciseIds = useMemo(() => {
     if (!activeTag) {
@@ -37,7 +76,7 @@ export default function ExerciseList() {
   }, [activeTag, workouts]);
 
   const filteredExercises = useMemo(() => {
-    return STANDING_NO_EQUIPMENT_EXERCISES.filter((exercise) => {
+    return allExercises.filter((exercise) => {
       const matchesTag = !taggedExerciseIds || taggedExerciseIds.has(exercise.id);
       const matchesQuery =
         query.trim().length === 0 ||
@@ -47,11 +86,11 @@ export default function ExerciseList() {
       const matchesPosture = postureFilter === "all" || exercise.posture === postureFilter;
       const matchesFocus =
         focusFilter === "all" ||
-        (focusFilter === "warmup-stretch" && WARMUP_STRETCH_EXERCISE_IDS.has(exercise.id)) ||
-        (focusFilter === "cooldown" && COOLDOWN_EXERCISE_IDS.has(exercise.id));
+        (focusFilter === "warmup-stretch" && warmupIds.has(exercise.id)) ||
+        (focusFilter === "cooldown" && cooldownIds.has(exercise.id));
       return matchesTag && matchesQuery && matchesType && matchesPosture && matchesFocus;
     });
-  }, [query, typeFilter, postureFilter, focusFilter, taggedExerciseIds]);
+  }, [allExercises, query, typeFilter, postureFilter, focusFilter, taggedExerciseIds, warmupIds, cooldownIds]);
   const totalPages = Math.max(1, Math.ceil(filteredExercises.length / EXERCISES_PER_PAGE));
   const pageStart = (currentPage - 1) * EXERCISES_PER_PAGE;
   const pagedExercises = filteredExercises.slice(pageStart, pageStart + EXERCISES_PER_PAGE);
@@ -101,11 +140,25 @@ export default function ExerciseList() {
         <label className="block">
           <input
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              const validated = validateSafeTextInput(event.target.value, {
+                maxLength: 120,
+                allowEmpty: true,
+              });
+              if (validated.error) {
+                setQueryError(validated.error);
+                return;
+              }
+              setQuery(validated.value);
+              setQueryError("");
+            }}
             placeholder="Search exercises..."
             className="input-modern"
           />
         </label>
+        {queryError ? (
+          <p className="text-xs font-medium text-orange-700 dark:text-orange-300">{queryError}</p>
+        ) : null}
 
         {showFilters ? (
           <>
@@ -221,12 +274,12 @@ export default function ExerciseList() {
               <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-900 dark:bg-orange-950/60 dark:text-orange-200">
                 {exercise.posture}
               </span>
-              {WARMUP_STRETCH_EXERCISE_IDS.has(exercise.id) ? (
+              {warmupIds.has(exercise.id) ? (
                 <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200">
                   warm-up/stretch
                 </span>
               ) : null}
-              {COOLDOWN_EXERCISE_IDS.has(exercise.id) ? (
+              {cooldownIds.has(exercise.id) ? (
                 <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-900 dark:bg-sky-950/60 dark:text-sky-200">
                   cooldown
                 </span>

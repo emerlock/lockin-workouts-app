@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMemo, useRef, useState } from "react";
 import ExerciseInfographic from "../compoents/ExerciseInfographic";
 import RoutinePlayer from "../compoents/RoutinePlayer";
@@ -17,6 +17,8 @@ export default function WorkoutDetail() {
   const [showExercises, setShowExercises] = useState(false);
   const routineSectionRef = useRef<HTMLDivElement | null>(null);
   const { workoutId } = useParams();
+  const navigate = useNavigate();
+  const removeWorkout = useWorkoutStore((state) => state.removeWorkout);
   const workout = useWorkoutStore((state) =>
     workoutId ? state.getWorkoutById(workoutId) : undefined,
   );
@@ -114,6 +116,15 @@ export default function WorkoutDetail() {
       block: "start",
     });
   };
+  const isCustomWorkout = workout.tags.some((tag) => tag.toLowerCase() === "custom");
+  const onDeleteWorkout = () => {
+    const confirmed = window.confirm(`Delete "${workout.name}"? This cannot be undone.`);
+    if (!confirmed) {
+      return;
+    }
+    removeWorkout(workout.id);
+    navigate("/workouts");
+  };
 
   return (
     <section className="card-modern">
@@ -121,17 +132,28 @@ export default function WorkoutDetail() {
         <h1 className="text-2xl font-bold text-brand-primary dark:text-purple-300 sm:text-3xl">
           Workout Detail
         </h1>
-        <button
-          type="button"
-          onClick={onPlayWorkout}
-          aria-label="Play workout"
-          title="Play workout"
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary text-white shadow-md transition hover:bg-brand-primaryDark"
-        >
-          <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
-            <path d="M8 6v12l10-6-10-6z" fill="currentColor" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-2">
+          {isCustomWorkout ? (
+            <button
+              type="button"
+              onClick={onDeleteWorkout}
+              className="rounded-md border border-orange-300 px-3 py-2 text-xs font-semibold text-orange-800 transition hover:bg-orange-50 dark:border-orange-700 dark:text-orange-200 dark:hover:bg-orange-950/40"
+            >
+              Delete
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={onPlayWorkout}
+            aria-label="Play workout"
+            title="Play workout"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary text-white shadow-md transition hover:bg-brand-primaryDark"
+          >
+            <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
+              <path d="M8 6v12l10-6-10-6z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
       </div>
       <div className="-mx-2 mt-5 rounded-xl bg-brand-primarySoft p-4 sm:mx-0 sm:p-5 dark:bg-purple-950">
         <h2 className="text-xl font-semibold text-brand-primaryDark dark:text-purple-200 sm:text-2xl">
