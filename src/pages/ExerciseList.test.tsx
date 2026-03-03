@@ -50,4 +50,26 @@ describe("ExerciseList page", () => {
     expect(stickyContainer?.className).toContain("sticky");
     expect(stickyContainer?.className).toContain("top-2");
   });
+
+  it("shows warm-up/stretch exercises when focus filter is selected", async () => {
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(screen.getByRole("button", { name: "Warm-Up / Stretch" }));
+
+    expect(screen.getByText("Neck Rolls")).toBeInTheDocument();
+    expect(screen.getAllByText(/warm-up\/stretch/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText("Push-Ups")).not.toBeInTheDocument();
+  });
+
+  it("shows cooldown exercises when cooldown filter is selected", async () => {
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(screen.getByRole("button", { name: "Cooldown" }));
+
+    expect(screen.getByText("Standing Forward Fold Stretch")).toBeInTheDocument();
+    expect(screen.getAllByText(/cooldown/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText("Push-Ups")).not.toBeInTheDocument();
+  });
 });

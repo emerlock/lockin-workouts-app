@@ -11,12 +11,15 @@ export default function Home() {
           Welcome to LockIn Workouts
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-purple-700 dark:text-purple-200">
-          Plan effective no-equipment workouts, follow guided intervals, and stay focused with
-          voice prompts, timers, and smart routine flow.
+          Plan no-equipment workouts, add optional warm-up/cooldown blocks, and follow guided
+          routines with voice prompts, timers, and smart playback flow.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link to="/workouts" className="btn-primary">
             View Workouts
+          </Link>
+          <Link to="/exercises" className="btn-primary">
+            Browse Exercises
           </Link>
           <Link to="/workouts/new" className="btn-secondary">
             Create Workout
@@ -30,7 +33,8 @@ export default function Home() {
             Guided Intervals
           </h2>
           <p className="mt-2 text-sm text-purple-700 dark:text-purple-200">
-            Stay on pace with interval timers, visual progress, and a floating playback box.
+            Stay on pace with interval timers, voice cues, chimes, visual progress, and a floating
+            playback box.
           </p>
         </article>
         <article className="card-modern">
@@ -38,15 +42,27 @@ export default function Home() {
             Smart Exercise Library
           </h2>
           <p className="mt-2 text-sm text-purple-700 dark:text-purple-200">
-            Mix standing and bodyweight exercises with descriptions, tags, and visual guidance.
+            Explore standing, bodyweight, warm-up, and cooldown exercises with infographic-based
+            movement guidance.
           </p>
         </article>
         <article className="card-modern">
           <h2 className="text-lg font-bold text-brand-primary dark:text-purple-300">
-            Consistent Training
+            Fast Filtering
           </h2>
           <p className="mt-2 text-sm text-purple-700 dark:text-purple-200">
-            Use ready-made routines or build your own and jump right into a focused session.
+            Use sticky search, grouped tag filters, and pagination on both Workouts and Exercises
+            to find sessions quickly.
+          </p>
+        </article>
+        <article className="card-modern md:col-span-3">
+          <h2 className="text-lg font-bold text-brand-primary dark:text-purple-300">
+            Flexible Session Flow
+          </h2>
+          <p className="mt-2 text-sm text-purple-700 dark:text-purple-200">
+            On workout details, optionally include +5 minute warm-up and/or cooldown blocks and
+            review exercises by section (Warm-Up, Core Workout, Cooldown) with a collapsible
+            accordion.
           </p>
         </article>
       </div>
